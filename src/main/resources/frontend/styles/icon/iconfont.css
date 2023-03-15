@@ -1,0 +1,75 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 3766366 */
+  src: url('iconfont.woff2?t=1668225489987') format('woff2'),
+       url('iconfont.woff?t=1668225489987') format('woff'),
+       url('iconfont.ttf?t=1668225489987') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-yaoqing:before {
+  content: "\fc22";
+}
+
+.icon-shouye:before {
+  content: "\fc24";
+}
+
+.icon-tishi:before {
+  content: "\fc2c";
+}
+
+.icon-wode:before {
+  content: "\fc2e";
+}
+
+.icon-gonggao:before {
+  content: "\fc30";
+}
+
+.icon-wenzhang:before {
+  content: "\fc34";
+}
+
+.icon-fenlei:before {
+  content: "\fc37";
+}
+
+.icon-renwu:before {
+  content: "\fc3f";
+}
+
+.icon-chakandingdan:before {
+  content: "\fc43";
+}
+
+.icon-youjian:before {
+  content: "\fc45";
+}
+
+.icon-gengduo:before {
+  content: "\fc58";
+}
+
+.icon-xuanxiang:before {
+  content: "\fc5a";
+}
+
+.icon-shanchu:before {
+  content: "\fc62";
+}
+
+.icon-faxian:before {
+  content: "\fc64";
+}
+
+.icon-wendang:before {
+  content: "\fc6c";
+}
+

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>密码找回</title>
+    <link rel="shortcut icon" href="../../logo.jpg">
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../../plugins/element-ui/index.css" />
+    <link rel="stylesheet" href="../../styles/common.css">
+    <link rel="stylesheet" href="../../styles/login.css">
+    <link rel="stylesheet" href="../../styles/icon/iconfont.css" />
+    <style>
+        .body {
+            min-width: 1366px;
+        }
+    </style>
+</head>
+
+<body
+    style="background-image: url(../../images/login/bg3.png);background-repeat: no-repeat; background-size: 100% 100%;">
+    <div class="login" id="login-app">
+        <div class="login-form1">
+            <el-form ref="form" :model="form" :rules="loginRules">
+                <div style="text-align:center">
+                    <p>密码找回</p>
+                </div>
+                <div class="login-form-title">
+                    <img src="../../images/login/key.png" style="width:80px;height:80px;" alt="" />
+                </div>
+                <el-form-item prop="mail">
+                    <el-input v-model="form.mail" type="text" auto-complete="off" placeholder="邮箱"
+                              maxlength="25" prefix-icon="iconfont icon-user" style="width:62%;"></el-input>
+                    <el-button type="primary" style="width:35%;font-size: small;text-align: center" @click='getCode'>获取验证码</el-button>
+                </el-form-item>
+                <div class="divMsg" v-if="msgFlag" style="color: red;font-size: xx-small;text-align: center">邮箱号输入不正确，请重新输入</div>
+                <el-form-item prop="code">
+                    <el-input v-model="form.code" type="password" placeholder="验证码"
+                        prefix-icon="iconfont icon-lock" maxlength="20" @keyup.enter.native="handleLogin" />
+                </el-form-item>
+                <el-form-item style="width:100%;">
+                    <el-button :loading="loading" class="login-btn" size="medium" type="primary" style="width:100%;"
+                        @click="btnLogin">
+                        <span v-if="!loading">找回</span>
+                        <span v-else>跳转中</span>
+                    </el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+    </div>
+
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="../../plugins/vue/vue.js"></script>
+    <!-- 引入组件库 -->
+    <script src="../../plugins/element-ui/index.js"></script>
+    <!-- 引入axios -->
+    <script src="../../plugins/axios/axios.min.js"></script>
+    <script src="../../js/request.js"></script>
+    <script src="../../js/validate.js"></script>
+    <script src="../../api/login.js"></script>
+
+    <script>
+        new Vue({
+            el: '#login-app',
+            data(){
+                return {
+                    form:{
+                        mail:'',
+                        code:''
+                    },
+                    msgFlag:false,
+                    loading:false
+                }
+            },
+            computed: {
+                loginRules() {
+                    const validateUsername = (rule, value, callback) => {
+                        if (value.length < 1) {
+                            callback(new Error('请输入邮箱'))
+                        } else {
+                            callback()
+                        }
+                    }
+                    const validatePassword = (rule, value, callback) => {
+                        if (value.length != 4) {
+                            callback(new Error('验证码位数错误'))
+                        } else {
+                            callback()
+                        }
+                    }
+                    return {
+                        'mail': [{ 'validator': validateUsername, 'trigger': 'blur' }],
+                        'code': [{ 'validator': validatePassword, 'trigger': 'blur' }]
+                    }
+                }
+            },
+            created() {
+            },
+            methods: {
+                getCode(){
+                    this.form.code = ''
+                    const regex =  /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/;
+                    if (regex.test(this.form.mail)) {
+                        this.msgFlag = false
+                        //this.form.code = (Math.random()*1000000).toFixed(0)
+                        sendMsgApi({mail:this.form.mail})
+                    }else{
+                        this.msgFlag = true
+                    }
+                },
+                async btnLogin(){
+                    if(this.form.mail && this.form.code){
+                        this.loading = true
+                        const res = await changeApi(this.form)
+                        this.loading = false
+                        if(res.code === 1){
+                            localStorage.setItem('mail', JSON.stringify(this.form.mail))
+                                window.location.href= '/frontend/page/login/changePwd.html'
+                        }else{
+                            this.$message.error(res.msg)
+                        }
+                    }else{
+                        this.$message.error("请输入邮箱")
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
